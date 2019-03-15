@@ -1,5 +1,8 @@
 var buddy_data = (function () {
 
+var currentDate = new Date();
+var currentMonth = currentDate.getUTCMonth() + 1;
+var currentDay = currentDate.getDate();
 var exports = {};
 
 /*
@@ -157,13 +160,23 @@ exports.user_title = function (user_id) {
 };
 
 exports.info_for = function (user_id) {
+    var isBirthday = false;
     var buddy_status = exports.buddy_status(user_id);
     var person = people.get_person_from_user_id(user_id);
     var my_user_status = exports.my_user_status(user_id);
     var title = exports.user_title(user_id);
-
+    console.log(person["dob"] !== "None");
+    if (person["dob"] !== "None") {
+        year_month_day = person["dob"].split("-");
+        var month = Number(year_month_day[1]);
+        var day = Number(year_month_day[2]);
+        if ((day === currentDay) && (month === currentMonth)) {
+            isBirthday = true
+        }
+    }
     return {
         href: hash_util.pm_with_uri(person.email),
+        email: person.email,
         name: person.full_name,
         user_id: user_id,
         my_user_status: my_user_status,
@@ -171,6 +184,7 @@ exports.info_for = function (user_id) {
         num_unread: get_num_unread(user_id),
         type: buddy_status,
         title: title,
+        isBirthday: isBirthday
     };
 };
 

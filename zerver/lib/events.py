@@ -89,6 +89,7 @@ def get_raw_user_data(realm_id: int, client_gravatar: bool) -> Dict[int, Dict[st
         result = dict(
             email=row['email'],
             user_id=row['id'],
+            dob=str(row['dob']),
             avatar_url=avatar_url,
             is_admin=is_admin,
             is_guest=is_guest,
@@ -248,6 +249,7 @@ def fetch_initial_state_data(user_profile: UserProfile,
         state['email'] = user_profile.email
         state['delivery_email'] = user_profile.delivery_email
         state['full_name'] = user_profile.full_name
+        state['dob'] = str(user_profile.dob)
 
     if want('realm_bot'):
         state['realm_bots'] = get_owned_bot_dicts(user_profile)

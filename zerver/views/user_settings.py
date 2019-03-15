@@ -11,7 +11,7 @@ from zerver.decorator import has_request_variables, \
 from zerver.lib.actions import do_change_password, do_change_notification_settings, \
     do_change_enter_sends, do_regenerate_api_key, do_change_avatar_fields, \
     do_set_user_display_setting, validate_email, do_change_user_delivery_email, \
-    do_start_email_change_process, check_change_full_name, \
+    do_start_email_change_process, check_change_full_name, check_change_dob, \
     get_available_notification_sounds
 from zerver.lib.avatar import avatar_url
 from zerver.lib.send_email import send_email, FromAddress
@@ -56,11 +56,16 @@ def confirm_email_change(request: HttpRequest, confirmation_key: str) -> HttpRes
 @has_request_variables
 def json_change_settings(request: HttpRequest, user_profile: UserProfile,
                          full_name: str=REQ(default=""),
+                         dob: str=REQ(default=""),
                          email: str=REQ(default=""),
                          old_password: str=REQ(default=""),
                          new_password: str=REQ(default="")) -> HttpResponse:
-    if not (full_name or new_password or email):
+    if not (full_name or new_password or email or dob):
         return json_error(_("Please fill out all fields."))
+
+    print("###########################################")
+    print(dob)
+    print("###########################################")
 
     if new_password != "":
         return_data = {}  # type: Dict[str, Any]
@@ -107,6 +112,9 @@ def json_change_settings(request: HttpRequest, user_profile: UserProfile,
         else:
             # Note that check_change_full_name strips the passed name automatically
             result['full_name'] = check_change_full_name(user_profile, full_name, user_profile)
+    
+    if user_profile.dob != dob:
+        result['dob'] = check_change_dob(user_profile, dob, user_profile)
 
     return json_success(result)
 

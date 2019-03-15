@@ -322,7 +322,7 @@ def user_profile_by_api_key_cache_key(api_key: str) -> str:
     return "user_profile_by_api_key:%s" % (api_key,)
 
 realm_user_dict_fields = [
-    'id', 'full_name', 'short_name', 'email',
+    'id', 'full_name', 'short_name', 'email', 'dob',
     'avatar_source', 'avatar_version', 'is_active',
     'is_realm_admin', 'is_bot', 'realm_id', 'timezone',
     'date_joined', 'is_guest'

@@ -285,6 +285,18 @@ exports.set_up = function () {
         }
     });
 
+    $("#change_dob").on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!page_params.realm_name_changes_disabled || page_params.is_admin) {
+            $("#change_dob").children("input")[0].flatpickr({
+                altInput: true,
+                altFormat: "F j, Y"});
+        }
+    });
+
+
+
     $('#change_password').on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -369,6 +381,32 @@ exports.set_up = function () {
     $('#new_password').on('change keyup', function () {
         var field = $('#new_password');
         common.password_quality(field.val(), $('#pw_strength .bar'), field);
+    });
+
+    $("#user_dob").on('change', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var change_dob_info = $('.change_dob_info').expectOne();
+        var data = {};
+        data.dob = $('#user_dob').val();
+
+        //var split_dob = data.dob.split("-")
+        //data.dob = split_dob[2] + "/" + split_dob[1] + "/" + split_dob[0];
+        console.log(data);
+        channel.patch({
+            url: '/json/settings',
+            data: data,
+            success: function (data) {
+                if ('dob' in data) {
+                    settings_change_success(i18n.t("Updated settings!"));
+                } else {
+                    settings_change_success(i18n.t("No changes made."));
+                }
+            },
+            error: function (xhr) {
+                ui_report.error(i18n.t("Failed"), xhr, change_dob_info);
+            },
+        });
     });
 
     $("#change_full_name_button").on('click', function (e) {

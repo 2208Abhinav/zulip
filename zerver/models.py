@@ -702,6 +702,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     full_name = models.CharField(max_length=MAX_NAME_LENGTH)  # type: str
 
+    dob = models.DateField(blank=True, null=True)  # type: datetime.datetime
+
     # short_name is currently unused.
     short_name = models.CharField(max_length=MAX_NAME_LENGTH)  # type: str
 

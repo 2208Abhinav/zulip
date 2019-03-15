@@ -79,6 +79,19 @@
                 </div>
             </form>
 
+            <form class="form-horizontal dob-change-form">
+                <div class="input-group inline-block grid user-dob-parent">
+                    <div class="dob-section inline-block">
+                        <label for="user_dob" class="inline-block title">{{t "Birthday" }}</label>
+                        <a id="change_dob" {{#if page_params.is_admin}}href="#change_email"{{else}}{{#unless page_params.realm_name_changes_disabled}}href="#change_email"{{/unless}}{{/if}}>
+                            <input id="user_dob" class="custom_user_field_value datepicker flatpickr-input form-control input active"
+                                tabindex="0" type="text" readonly="readonly" value="{{ page_params.dob }}">
+                        </a>
+                        <div class="alert change_dob_info" style="display: none;"></div>
+                    </div>
+                </div>
+            </form>
+
             <form class="password-change-form grid">
                 {{#if page_params.realm_email_auth_enabled}}
                 <div class="user-name-section">

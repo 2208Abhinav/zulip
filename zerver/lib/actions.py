@@ -75,6 +75,7 @@ from zerver.lib.topic_mutes import (
 from zerver.lib.users import (
     bulk_get_users,
     check_bot_name_available,
+    check_dob,
     check_full_name,
     get_api_key,
 )
@@ -3085,6 +3086,21 @@ def do_change_password(user_profile: UserProfile, password: str, commit: bool=Tr
     RealmAuditLog.objects.create(realm=user_profile.realm, acting_user=user_profile,
                                  modified_user=user_profile, event_type=RealmAuditLog.USER_PASSWORD_CHANGED,
                                  event_time=event_time)
+
+
+def do_change_dob(user_profile: UserProfile, dob: str,
+                        acting_user: Optional[UserProfile]) -> None:
+    old_dob = user_profile.dob
+    user_profile.dob = dob
+    user_profile.save(update_fields=["dob"])
+        
+
+def check_change_dob(user_profile: UserProfile, dob_raw: str,
+                           acting_user: UserProfile) -> str:
+    new_dob = check_dob(dob_raw)
+    do_change_dob(user_profile, new_dob, acting_user)
+    return new_dob
+    
 
 def do_change_full_name(user_profile: UserProfile, full_name: str,
                         acting_user: Optional[UserProfile]) -> None:

@@ -1,5 +1,7 @@
 from typing import Dict, List, Optional, Union, cast
 
+from datetime import datetime
+
 from django.db.models.query import QuerySet
 from django.utils.translation import ugettext as _
 
@@ -12,6 +14,18 @@ from zerver.models import UserProfile, Service, Realm, \
     CustomProfileField
 
 from zulip_bots.custom_exceptions import ConfigValidationError
+
+def check_dob(dob_raw: str) -> str:
+    dob = dob_raw
+    print("*************************************")
+    print(dob)
+    print("*************************************")
+    year, month, day = dob.split("-")
+    try:
+        datetime(int(year), int(month), int(day))
+    except ValueError:
+        raise JsonableError(_("Invalid birthday!"))
+    return dob
 
 def check_full_name(full_name_raw: str) -> str:
     full_name = full_name_raw.strip()

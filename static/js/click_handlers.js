@@ -568,8 +568,25 @@ exports.initialize = function () {
             trigger: 'feedback button'});
 
     });
-
-
+/*
+    $("body").on('click', '.birthday-cake', function (e) {
+        var user_email = e.currentTarget.getAttribute("data-user-email");
+        var user_id = e.currentTarget.getAttribute("data-user-id");
+        var user_name = e.currentTarget.getAttribute("data-user-name");
+        compose.send_message({
+            type: "private",
+            content: "Happy Birthday " + user_name,
+            sender_id: page_params.user_id,
+            queue_id: page_params.queue_id,
+            stream: "",
+            topic: "",
+            to: [user_email],
+            reply_to: user_email,
+            private_message_recipient: user_email,
+            to_user_ids: user_id
+        });
+    });
+*/
     // WEBATHENA
 
     $('body').on('click', '.webathena_login', function (e) {
